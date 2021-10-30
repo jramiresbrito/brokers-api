@@ -18,7 +18,26 @@
 !/tmp/pids/
 !/tmp/pids/.keep
 
+# Ignore byebug history
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore documentation files
+.yardoc
+
+# Ignore ruby version
+.ruby-version
+
+# Ignore code coverage files
+coverage/*
+coverage/.*
+!/coverage/.keep
+
+# Ignore env files
+.env
+
+# Ignore Mac and Linux file system files
+*.swp
+.DS_Store

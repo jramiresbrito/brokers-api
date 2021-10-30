@@ -1,0 +1,14 @@
+.git
+.gitignore
+README.md
+
+log
+tmp
+public/system
+coverage/
+spec/tmp
+
+.ruby-version
+.ruby-gemset
+
+.rvmrc

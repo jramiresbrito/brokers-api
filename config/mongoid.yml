@@ -1,0 +1,10 @@
+development:
+  clients:
+    default:
+      database: <%= ENV["MONGO_DB_NAME"] || "brokers_development" %>
+      hosts:
+        - <%= ENV["MONGO_URL"] || "127.0.0.1:27017" %>
+      options:
+        read:
+          mode: :primary
+        connect: :direct

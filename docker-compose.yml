@@ -1,0 +1,71 @@
+version: '3.5'
+
+services:
+  brokers-rails:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: brokers-example
+    volumes:
+      - .:/brokers
+    container_name: brokers-rails
+    command:  bash -c "rails db:migrate && rails server -b 0.0.0.0"
+    environment:
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - JWT_ISS=${JWT_ISS:-http://localhost:3000}
+      - MONGO_URL=brokers-mongo:27017
+      - HOSTNAME=brokers-rails
+      - SERVICE_NAME=brokers
+      - MAILCATCHER_HOST=brokers-mailcatcher
+    ports:
+      - 3000:3000
+    depends_on:
+      - brokers-mongo
+      - brokers-rabbitmq
+    restart: on-failure
+    networks:
+      - brokers-bridge
+
+  brokers-mongo:
+    image: 'mongo:4.0'
+    container_name: brokers-mongo
+    ports:
+      - 27017:27017
+    environment:
+      AUTH: 'no'
+    command: mongod
+    volumes:
+      - brokers_mongodb_data:/data/db
+    networks:
+      - brokers-bridge
+
+  brokers-rabbitmq:
+    image: 'rabbitmq:3.9.8-management'
+    container_name: brokers-rabbitmq
+    hostname: rabbitmq-master
+    environment:
+      - RABBITMQ_ERLANG_COOKIE='secret cookie'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - brokers_rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - brokers-bridge
+
+  brokers-mailcatcher:
+    image: rordi/docker-mailcatcher
+    container_name: brokers-mailcatcher
+    ports:
+      - 1080:1080
+    networks:
+      - brokers-bridge
+
+volumes:
+  brokers_mongodb_data:
+  brokers_rabbitmq_data:
+
+networks:
+  brokers-bridge:
+    name: brokers-bridge
+    driver: bridge
