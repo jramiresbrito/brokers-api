@@ -1,3 +1,11 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :brokers, only: %i[create show] do
+    collection do
+      get 'me'
+    end
+  end
+
+  resources :sign_in, only: :create
+  post '/password_reset', to: 'password_reset#create'
+  post '/password_update', to: 'password_update#create'
 end

@@ -1,0 +1,1 @@
+class ResetPasswordError < StandardError; end
