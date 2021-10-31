@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
   API_SECRET = Rails.application.secrets.secret_key_base
   before_action :authorized
 
-
+  include Wisper::Publisher
   include SimpleErrorRenderable
   self.simple_error_partial = "shared/simple_error"
 

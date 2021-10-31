@@ -7,7 +7,7 @@ class PasswordResetController < ApplicationController
 
     broker&.generate_password_token!
 
-    send_reset_password_email(broker.id)
+    send_reset_password_email(broker.id.to_s)
 
     head :no_content
   end
@@ -19,6 +19,6 @@ class PasswordResetController < ApplicationController
   end
 
   def send_reset_password_email(broker_id)
-    BrokerMailer.with(broker_id: broker_id).reset_password.deliver_now!
+    broadcast(:send_reset_password_email, broker_id)
   end
 end

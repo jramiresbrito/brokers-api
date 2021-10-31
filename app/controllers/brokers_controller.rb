@@ -7,7 +7,7 @@ class BrokersController < ApplicationController
 
     if broker.valid?
       token = encode_token(broker)
-      send_welcome_email(broker.id)
+      send_welcome_email(broker.id.to_s)
       render json: { token: token }, status: :created
     else
       render_error(fields: broker.errors.messages, status: :bad_request)
@@ -37,6 +37,6 @@ class BrokersController < ApplicationController
   end
 
   def send_welcome_email(broker_id)
-    BrokerMailer.with(broker_id: broker_id).welcome_email.deliver_now!
+    broadcast(:new_broker_registered, broker_id)
   end
 end

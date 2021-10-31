@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :owned_assets
   resources :bids, only: %i[index create show]
   resources :assets, only: %i[index show]
 
