@@ -1,8 +1,9 @@
 class Asset
   include Mongoid::Document
-  include Mongoid::Document
   include Mongoid::Timestamps
   include LikeSearchable
+
+  has_many :bids
 
   field :full_name, type: String
   field :code, type: String

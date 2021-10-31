@@ -4,7 +4,7 @@ class Broker
   include Mongoid::Timestamps
   include LikeSearchable
 
-  before_save { self.email = email.downcase }
+  has_many :bids
 
   field :name, type: String
   field :email, type: String
@@ -18,6 +18,7 @@ class Broker
                     format: { with: URI::MailTo::EMAIL_REGEXP }
   has_secure_password
   validates :password, presence: true, length: { minimum: 6, maximum: 128 }
+  before_save { self.email = email.downcase }
 
   def generate_password_token!
     loop do
