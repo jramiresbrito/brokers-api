@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :assets, only: %i[index show]
+
   resources :brokers, only: %i[create show] do
     collection do
       get 'me'

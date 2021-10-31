@@ -1,0 +1,113 @@
+#!/bin/bash
+
+FILE_DIR=`perl -e 'use Cwd "abs_path";print abs_path(shift)' $0`
+BASE_DIR=`dirname $FILE_DIR`/..
+
+PROJECT_NAME="brokers-rails"
+
+CYAN='\033[0;36m'
+NC='\033[0m'
+RED='\033[0;31m'
+
+verify () {
+  if [ $? != 0 ]; then
+    printf "${RED}$1${NC}"
+    exit 2
+  fi
+}
+
+if [ "$1" = "build" ]; then
+  printf "${CYAN}"
+  echo "Rebuilding containers"
+  printf "${NC}"
+
+  docker-compose build
+  verify "Cannot build the containers. For more information take a look in docker's log"
+
+  printf "${CYAN}"
+  echo "############################################################"
+  echo "     To start the containers, run:
+  echo "     $ scripts/development start
+  echo "############################################################"
+  printf "${NC}"
+fi
+
+if [ "$1" = "start" ]; then
+  printf "${CYAN}"
+  echo "Starting docker-compose"
+  printf "${NC}"
+
+  docker-compose up -d
+  verify "Cannot run the container. For more information take a look in docker's log"
+
+  printf "${CYAN}"
+  echo "############################################################"
+  echo "     To execute commands in container you must run"
+  echo "     $ scripts/development exec <command>"
+  echo "############################################################"
+  printf "${NC}"
+fi
+
+if [ "$1" = "stop" ]; then
+  printf "${CYAN}"
+  echo "Stopping docker-compose"
+  printf "${NC}"
+
+  rm -rf tmp/pids/*
+  verify "Could not delete tmp/pids/*. Verify it manually"
+
+  docker-compose stop
+  verify "Could not stop the running containers. Verify it manually"
+
+  printf "${CYAN}"
+  echo "####################################"
+  echo "     The containers are stopped."
+  echo "####################################"
+  printf "${NC}"
+fi
+
+if [ "$1" = "exec" ]; then
+  printf "${CYAN}"
+  echo "Executing command into the container's work directory"
+  printf "${NC}"
+
+  shift
+  command="docker exec -it $PROJECT_NAME"
+
+  for word in $@; do
+     command="$command $word"
+  done
+
+  $command
+  verify "Cannot execute command into the container. Please verify logs"
+fi
+
+if [ "$1" = "log" ]; then
+  printf "${CYAN}"
+  echo "Tailing logs/development.log from the container"
+  printf "${NC}"
+
+  shift
+  command=(docker exec $PROJECT_NAME /bin/bash -c "tail -f /brokers-api/log/development.log")
+
+  "${command[@]}"
+fi
+
+if [ "$1" = "restart" ]; then
+  printf "${CYAN}"
+  echo "Restarting Rails server"
+  printf "${NC}"
+
+  shift
+  command="docker stop $PROJECT_NAME"
+
+  $command
+  verify "Cannot stop brokers-rails container"
+
+  docker-compose up -d
+  verify "Cannot run the container. For more information take a look in docker's log"
+
+  printf "${CYAN}"
+  echo "#####################RAILS RESTARTED########################"
+  printf "${NC}"
+fi
