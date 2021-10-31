@@ -7,7 +7,7 @@ class BidsController < ApplicationController
     @bid.broker = logged_in_broker
     @bid.asset = @asset
 
-    create_resource(@bid)
+    create_resource_with_event(@bid, :bid_created)
   end
 
   def show

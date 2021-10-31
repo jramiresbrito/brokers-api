@@ -22,6 +22,15 @@ class ApplicationController < ActionController::API
     }
   end
 
+  def create_resource_with_event(resource_obj, event_name)
+    if resource_obj.save
+      broadcast(event_name, resource_obj.id.to_s)
+      resource_success(resource_obj, :created)
+    else
+      render_error(fields: resource_obj.errors.messages)
+    end
+  end
+
   def create_resource(resource_obj)
     if resource_obj.save
       resource_success(resource_obj, :created)

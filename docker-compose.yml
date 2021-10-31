@@ -17,6 +17,9 @@ services:
       - HOSTNAME=brokers-rails
       - SERVICE_NAME=brokers
       - MAILCATCHER_HOST=brokers-mailcatcher
+      - HUTCH_MQ_HOST=brokers-rabbitmq
+      - HUTCH_MQ_API_HOST=brokers-rabbitmq
+      - HUTCH_MQ_EXCHANGE=resources
     ports:
       - 3000:3000
     depends_on:
