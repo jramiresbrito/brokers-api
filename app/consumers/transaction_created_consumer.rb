@@ -9,8 +9,6 @@ class TransactionCreatedConsumer
   consume 'transaction.created'
 
   def process(message)
-    event = message.delivery_info.routing_key
-
     payload = JSON.parse(message.payload).deep_symbolize_keys
     transaction = payload[:transaction]
 

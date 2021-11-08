@@ -2,14 +2,6 @@ class BidsController < ApplicationController
   before_action :find_asset, only: %i[buy create sell]
   before_action :set_bid, only: :show
 
-  def create
-    @bid = Bid.new(bid_params)
-    @bid.broker = logged_in_broker
-    @bid.asset = @asset
-
-    create_resource_with_event(@bid, :bid_created)
-  end
-
   def buy
     @bid = Bid.new(bid_params)
     @bid.operation = 'buy'
