@@ -1,5 +1,5 @@
 class BidsController < ApplicationController
-  before_action :find_asset, only: :create
+  before_action :find_asset, only: %i[buy create sell]
   before_action :set_bid, only: :show
 
   def create
@@ -8,6 +8,24 @@ class BidsController < ApplicationController
     @bid.asset = @asset
 
     create_resource_with_event(@bid, :bid_created)
+  end
+
+  def buy
+    @bid = Bid.new(bid_params)
+    @bid.operation = 'buy'
+    @bid.broker = logged_in_broker
+    @bid.asset = @asset
+
+    create_resource_with_event(@bid, :bid_asset)
+  end
+
+  def sell
+    @bid = Bid.new(bid_params)
+    @bid.operation = 'sell'
+    @bid.broker = logged_in_broker
+    @bid.asset = @asset
+
+    create_resource_with_event(@bid, :bid_asset)
   end
 
   def show
@@ -29,6 +47,6 @@ class BidsController < ApplicationController
   end
 
   def searchable_params
-    params.permit({ search: {} }, { page: {} }, :include)
+    params.permit({ search: {} }, { page: {} }, { order: {} }, { bid: {} })
   end
 end

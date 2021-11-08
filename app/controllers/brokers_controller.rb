@@ -33,7 +33,7 @@ class BrokersController < ApplicationController
   end
 
   def searchable_params
-    params.permit({ search: {} }, { page: {} }, :include)
+    params.permit({ search: {} }, { page: {} }, { order: {} }, { broker: {} })
   end
 
   def send_welcome_email(broker_id)

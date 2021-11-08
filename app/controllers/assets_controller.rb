@@ -21,6 +21,6 @@ class AssetsController < ApplicationController
   end
 
   def searchable_params
-    params.permit({ search: {} }, { page: {} }, :include)
+    params.permit({ search: {} }, { page: {} }, { order: {} }, { asset: {} })
   end
 end

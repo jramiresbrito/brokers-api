@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 40%;
+        margin: 0 auto;
+      }
+
+      td, th {
+        border: 1px solid #c1c1c1;
+        text-align: center;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+
+      .centered {
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Olá, <%= @broker.name %></h1>
+    <p>
+      A sua transação foi efetuada com sucesso!
+      Verifique a nova quantidade de papéis abaixo.
+    </p>
+
+    <br>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Código Ativo</th>
+          <th>Quantidade Atual</th>
+          <th>Nome Ativo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= @asset.code %></td>
+          <td><%= @owned_asset.amount %></td>
+          <td><%= @asset.full_name %></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Atenciosamente, Brokers API!</p>
+  </body>
+</html>

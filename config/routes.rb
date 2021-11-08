@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  resources :owned_assets
-  resources :bids, only: %i[index create show]
+  resources :owned_assets, only: %i[index show]
   resources :assets, only: %i[index show]
+  resources :bids, only: %i[index create show]
+  post '/buy', to: 'bids#buy'
+  post '/sell', to: 'bids#sell'
 
   resources :brokers, only: %i[create show] do
     collection do

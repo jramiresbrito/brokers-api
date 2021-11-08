@@ -25,6 +25,7 @@ class LoadModelService
     return searchable_model unless params.key?(:search)
 
     params[:search].each do |key, value|
+      value = value.to_i
       searchable_model = searchable_model.like(key, value)
     end
 
