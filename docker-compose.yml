@@ -19,7 +19,7 @@ services:
       - MAILCATCHER_HOST=brokers-mailcatcher
       - HUTCH_MQ_HOST=brokers-rabbitmq
       - HUTCH_MQ_API_HOST=brokers-rabbitmq
-      - HUTCH_MQ_EXCHANGE=resources
+      - HUTCH_MQ_EXCHANGE=bolsadevalores
     ports:
       - 3000:3000
     depends_on:
@@ -56,11 +56,46 @@ services:
     networks:
       - brokers-bridge
 
+  brokers-hutch:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: brokers-example
+    volumes:
+      - .:/brokers
+    container_name: brokers-hutch
+    command: hutch -v
+    environment:
+      - MONGO_URL=brokers-mongo:27017
+      - HOSTNAME=brokers-hutch
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - HUTCH_MQ_HOST=brokers-rabbitmq
+      - HUTCH_MQ_API_HOST=brokers-rabbitmq
+      - HUTCH_MQ_EXCHANGE=bolsadevalores
+    networks:
+      - brokers-bridge
+
   brokers-mailcatcher:
     image: rordi/docker-mailcatcher
     container_name: brokers-mailcatcher
     ports:
       - 1080:1080
+    networks:
+      - brokers-bridge
+
+  brokers-docs:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: brokers-example
+    volumes:
+      - .:/brokers
+    ports:
+      - 8808:8808
+    container_name: brokers-docs
+    command: yard server -r
+    depends_on:
+      - brokers-rails
     networks:
       - brokers-bridge
 

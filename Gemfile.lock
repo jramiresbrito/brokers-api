@@ -217,6 +217,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     wisper (2.0.1)
+    yard (0.9.26)
     zeitwerk (2.5.1)
 
 PLATFORMS
@@ -240,8 +241,10 @@ DEPENDENCIES
   puma (~> 4.1)
   rack-cors
   rails (~> 6.0.4, >= 6.0.4.1)
+  sorted_set
   tzinfo-data
   wisper
+  yard
 
 RUBY VERSION
    ruby 2.6.6p146
