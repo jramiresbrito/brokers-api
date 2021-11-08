@@ -2,28 +2,31 @@
 # RabbitMQ through
 # {https://www.rabbitmq.com/tutorials/tutorial-five-ruby.html topic exchanging}.
 #
-# It uses the *resources* topic to publish the payloads about events
-# related to the brokers actions, such as bid creation or asset selling.
-# Each event has a related routing key that follows this structure
-# - *resource_type.action.key2.key3* - starting with the resource type
-#   (e.g; bid, asset), related action (e.g.; created)
-#   and additional keys related to that specific event.
+# It uses the *BOLSADEVALORES* exchange to publish the payloads about events
+# related to the brokers actions, such as asset buying or selling.
+# Each event has a related routing key that follows this structure:
+# - *buy.asset_code.amount.value*
+# - *sell.asset_code.amount.value*
 #
 # The list of possible routing keys are described in the documentation of
 # each method of this class.
+#
+# @author Joao Victor Ramires Guimaraes Brito
 class RabbitmqListener
-  # Publish the bid with the specific asset code. This will be consumed by the
-  # Exchange-API in order to generate a transaction and, if there is a offer,
-  # it will become a {OwnedAsset}.
+  # Publish in *BOLSADEVALORES* exchange a request to buy a specific asset.
+  # This will be consumed by the Exchange-API in order to generate a bid of type
+  # buy. If there is matching bid of type sell, a transaction will happen and
+  # it will become an {OwnedAsset}.
   #
-  # * routing key: bid.created
+  # * routing key: bid.operation.asset_code.amount.value
   #
   # @param bid_id [String]
   # @!scope class
-  def self.bid_created(bid_id)
+  def self.bid_asset(bid_id)
     bid = Bid.find(bid_id)
+    operation = bid.operation
 
-    publish_resource(bid, "bid.created")
+    publish_resource(bid, "bid.#{operation}")
   end
 
   # Utility method to find and serialize the resource, and publish the proper
