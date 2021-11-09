@@ -54,6 +54,14 @@ It runs in port 1080.
 Also, the docker-compose will use the external newtork named **brokers-bridge** created
 by the [Brokers-API](https://github.com/jramiresbrito/brokers-api).
 
+Once you make sure all containers are working, run the script to populate the database with
+12 assets and two brokers. You can see this script [here](https://github.com/jramiresbrito/brokers-api/blob/master/db/seeds.rb).
+To run the seed script:
+
+```bash
+./scripts/development exec rails db:clean_seed
+```
+
 ### Atention ⚠
 Please make sure **all containers are up and running**. You can manually run a container
 if it doesn't work automatically using the provided script.
